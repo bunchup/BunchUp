@@ -11,6 +11,7 @@ import com.moreofakind.bunchup.models.Event;
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public TextView titleView;
+    public TextView dateView;
     public TextView authorView;
     public ImageView starView;
     public TextView numStarsView;
@@ -20,6 +21,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         titleView = (TextView) itemView.findViewById(R.id.post_title);
+        dateView = (TextView) itemView.findViewById(R.id.post_date);
         authorView = (TextView) itemView.findViewById(R.id.post_author);
         starView = (ImageView) itemView.findViewById(R.id.star);
         numStarsView = (TextView) itemView.findViewById(R.id.post_num_stars);
@@ -28,6 +30,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public void bindToPost(Event event, View.OnClickListener starClickListener) {
         titleView.setText(event.title);
+        dateView.setText(event.date + " - ");
         authorView.setText(event.author);
         numStarsView.setText(String.valueOf(event.starCount));
         bodyView.setText(event.body);
