@@ -3,16 +3,18 @@ package com.moreofakind.bunchup.models;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-// [START post_class]
+// [START event_class]
 @IgnoreExtraProperties
 public class Event {
 
     public String uid;
     public String author;
     public String title;
+    public String date;
     public String body;
     public int starCount = 0;
     public Map<String, Boolean> stars = new HashMap<>();
@@ -21,27 +23,29 @@ public class Event {
         // Default constructor required for calls to DataSnapshot.getValue(Event.class)
     }
 
-    public Event(String uid, String author, String title, String body) {
+    public Event(String uid, String author, String title, String date, String body) {
         this.uid = uid;
         this.author = author;
         this.title = title;
+        this.date = date;
         this.body = body;
     }
 
-    // [START post_to_map]
+    // [START event_to_map]
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", uid);
         result.put("author", author);
         result.put("title", title);
+        result.put("date", date);
         result.put("body", body);
         result.put("starCount", starCount);
         result.put("stars", stars);
 
         return result;
     }
-    // [END post_to_map]
+    // [END event_to_map]
 
 }
-// [END post_class]
+// [END event_class]

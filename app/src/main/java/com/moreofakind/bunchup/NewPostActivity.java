@@ -1,11 +1,15 @@
 package com.moreofakind.bunchup;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -13,9 +17,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.moreofakind.bunchup.fragment.DatePickerFragment;
 import com.moreofakind.bunchup.models.Event;
 import com.moreofakind.bunchup.models.User;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +35,7 @@ public class NewPostActivity extends BaseActivity {
     // [END declare_database_ref]
 
     private EditText mTitleField;
+    private TextView mDateField;
     private EditText mBodyField;
     private FloatingActionButton mSubmitButton;
 
@@ -42,6 +49,7 @@ public class NewPostActivity extends BaseActivity {
         // [END initialize_database_ref]
 
         mTitleField = (EditText) findViewById(R.id.field_title);
+        mDateField = (TextView) findViewById(R.id.field_date);
         mBodyField = (EditText) findViewById(R.id.field_body);
         mSubmitButton = (FloatingActionButton) findViewById(R.id.fab_submit_post);
 
@@ -53,13 +61,25 @@ public class NewPostActivity extends BaseActivity {
         });
     }
 
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
     private void submitPost() {
         final String title = mTitleField.getText().toString();
+        final String date = mDateField.getText().toString();
         final String body = mBodyField.getText().toString();
 
         // Title is required
         if (TextUtils.isEmpty(title)) {
             mTitleField.setError(REQUIRED);
+            return;
+        }
+
+        // Date is required
+        if (TextUtils.isEmpty(date)) {
+            mDateField.setError(REQUIRED);
             return;
         }
 
@@ -91,7 +111,7 @@ public class NewPostActivity extends BaseActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             // Write new post
-                            writeNewPost(userId, user.username, title, body);
+                            writeNewPost(userId, user.username, title, date, body);
                         }
 
                         // Finish this Activity, back to the stream
@@ -122,11 +142,11 @@ public class NewPostActivity extends BaseActivity {
     }
 
     // [START write_fan_out]
-    private void writeNewPost(String userId, String username, String title, String body) {
+    private void writeNewPost(String userId, String username, String title, String date, String body) {
         // Create new event at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
         String key = mDatabase.child("posts").push().getKey();
-        Event event = new Event(userId, username, title, body);
+        Event event = new Event(userId, username, title, date, body);
         Map<String, Object> postValues = event.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();

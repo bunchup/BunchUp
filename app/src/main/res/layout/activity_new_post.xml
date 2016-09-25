@@ -16,11 +16,24 @@
         android:hint="Titel"
         android:maxLines="1" />
 
+    <TextView
+        android:id="@+id/field_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/field_title"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:hint="Kies datum"
+        android:maxLines="1"
+        android:onClick="showDatePickerDialog" />
+
     <EditText
         android:id="@+id/field_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/field_title"
+        android:layout_below="@+id/field_date"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
