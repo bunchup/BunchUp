@@ -8,7 +8,7 @@ import java.util.Map;
 
 // [START post_class]
 @IgnoreExtraProperties
-public class Post {
+public class Event {
 
     public String uid;
     public String author;
@@ -17,11 +17,11 @@ public class Post {
     public int starCount = 0;
     public Map<String, Boolean> stars = new HashMap<>();
 
-    public Post() {
-        // Default constructor required for calls to DataSnapshot.getValue(Post.class)
+    public Event() {
+        // Default constructor required for calls to DataSnapshot.getValue(Event.class)
     }
 
-    public Post(String uid, String author, String title, String body) {
+    public Event(String uid, String author, String title, String body) {
         this.uid = uid;
         this.author = author;
         this.title = title;

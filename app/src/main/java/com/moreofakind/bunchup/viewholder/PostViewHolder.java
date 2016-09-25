@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.moreofakind.bunchup.R;
-import com.moreofakind.bunchup.models.Post;
+import com.moreofakind.bunchup.models.Event;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
@@ -26,11 +26,11 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         bodyView = (TextView) itemView.findViewById(R.id.post_body);
     }
 
-    public void bindToPost(Post post, View.OnClickListener starClickListener) {
-        titleView.setText(post.title);
-        authorView.setText(post.author);
-        numStarsView.setText(String.valueOf(post.starCount));
-        bodyView.setText(post.body);
+    public void bindToPost(Event event, View.OnClickListener starClickListener) {
+        titleView.setText(event.title);
+        authorView.setText(event.author);
+        numStarsView.setText(String.valueOf(event.starCount));
+        bodyView.setText(event.body);
 
         starView.setOnClickListener(starClickListener);
     }

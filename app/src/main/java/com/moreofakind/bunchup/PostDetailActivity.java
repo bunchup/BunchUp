@@ -19,9 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.moreofakind.bunchup.models.Event;
 import com.moreofakind.bunchup.models.User;
 import com.moreofakind.bunchup.models.Comment;
-import com.moreofakind.bunchup.models.Post;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,18 +84,18 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                Post post = dataSnapshot.getValue(Post.class);
+                // Get Event object and use the values to update the UI
+                Event event = dataSnapshot.getValue(Event.class);
                 // [START_EXCLUDE]
-                mAuthorView.setText(post.author);
-                mTitleView.setText(post.title);
-                mBodyView.setText(post.body);
+                mAuthorView.setText(event.author);
+                mTitleView.setText(event.title);
+                mBodyView.setText(event.body);
                 // [END_EXCLUDE]
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
+                // Getting Event failed, log a message
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
                 // [START_EXCLUDE]
                 Toast.makeText(PostDetailActivity.this, "Failed to load post.",

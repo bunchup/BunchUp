@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_weight="0.2"
             android:layout_height="wrap_content"
-            android:text="@string/post"/>
+            android:text="@string/event"/>
 
     </LinearLayout>
 

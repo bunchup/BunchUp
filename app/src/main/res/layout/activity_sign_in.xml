@@ -15,8 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:src="@drawable/logo" />
+        android:src="@drawable/logo_small" />
 
     <LinearLayout
         android:id="@+id/layout_email_password"
@@ -70,6 +71,8 @@
             android:text="@string/sign_up" />
 
     </LinearLayout>
+
+
 
 
 </RelativeLayout>

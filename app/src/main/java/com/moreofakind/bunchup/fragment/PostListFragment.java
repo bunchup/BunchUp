@@ -21,7 +21,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.moreofakind.bunchup.R;
 import com.moreofakind.bunchup.PostDetailActivity;
-import com.moreofakind.bunchup.models.Post;
+import com.moreofakind.bunchup.models.Event;
 import com.moreofakind.bunchup.viewholder.PostViewHolder;
 
 public abstract class PostListFragment extends Fragment {
@@ -32,7 +32,7 @@ public abstract class PostListFragment extends Fragment {
     private DatabaseReference mDatabase;
     // [END define_database_reference]
 
-    private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
+    private FirebaseRecyclerAdapter<Event, PostViewHolder> mAdapter;
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
 
@@ -66,10 +66,10 @@ public abstract class PostListFragment extends Fragment {
 
         // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = getQuery(mDatabase);
-        mAdapter = new FirebaseRecyclerAdapter<Post, PostViewHolder>(Post.class, R.layout.item_post,
+        mAdapter = new FirebaseRecyclerAdapter<Event, PostViewHolder>(Event.class, R.layout.item_post,
                 PostViewHolder.class, postsQuery) {
             @Override
-            protected void populateViewHolder(final PostViewHolder viewHolder, final Post model, final int position) {
+            protected void populateViewHolder(final PostViewHolder viewHolder, final Event model, final int position) {
                 final DatabaseReference postRef = getRef(position);
 
                 // Set click listener for the whole post view
@@ -91,7 +91,7 @@ public abstract class PostListFragment extends Fragment {
                     viewHolder.starView.setImageResource(R.drawable.ic_toggle_star_outline_24);
                 }
 
-                // Bind Post to ViewHolder, setting OnClickListener for the star button
+                // Bind Event to ViewHolder, setting OnClickListener for the star button
                 viewHolder.bindToPost(model, new View.OnClickListener() {
                     @Override
                     public void onClick(View starView) {
@@ -114,7 +114,7 @@ public abstract class PostListFragment extends Fragment {
         postRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
-                Post p = mutableData.getValue(Post.class);
+                Event p = mutableData.getValue(Event.class);
                 if (p == null) {
                     return Transaction.success(mutableData);
                 }

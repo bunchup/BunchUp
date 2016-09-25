@@ -13,7 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.moreofakind.bunchup.models.Post;
+import com.moreofakind.bunchup.models.Event;
 import com.moreofakind.bunchup.models.User;
 
 import java.util.HashMap;
@@ -123,11 +123,11 @@ public class NewPostActivity extends BaseActivity {
 
     // [START write_fan_out]
     private void writeNewPost(String userId, String username, String title, String body) {
-        // Create new post at /user-posts/$userid/$postid and at
+        // Create new event at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
         String key = mDatabase.child("posts").push().getKey();
-        Post post = new Post(userId, username, title, body);
-        Map<String, Object> postValues = post.toMap();
+        Event event = new Event(userId, username, title, body);
+        Map<String, Object> postValues = event.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/posts/" + key, postValues);
