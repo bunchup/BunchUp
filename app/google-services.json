@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "147081473623",
+    "firebase_url": "https://bunch-up.firebaseio.com",
+    "project_id": "bunch-up",
+    "storage_bucket": "bunch-up.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147081473623:android:2c3116cc8aed9efb",
+        "android_client_info": {
+          "package_name": "com.moreofakind.bunchup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147081473623-t6brui4icbok41gfkm3793eqmt88n6so.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8m0C5G3vWOVWe_trgyThOXJ6EExMS-U8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
