@@ -8,6 +8,9 @@ import android.widget.TextView;
 import com.moreofakind.bunchup.R;
 import com.moreofakind.bunchup.models.Event;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public TextView titleView;
@@ -30,7 +33,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public void bindToPost(Event event, View.OnClickListener starClickListener) {
         titleView.setText(event.title);
-        dateView.setText(event.date + " - ");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        dateView.setText(sdf.format(new Date(event.epoch)) + " - ");
         authorView.setText(event.author);
         numStarsView.setText(String.valueOf(event.starCount));
         bodyView.setText(event.body);

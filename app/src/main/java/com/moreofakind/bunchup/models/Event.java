@@ -14,7 +14,7 @@ public class Event {
     public String uid;
     public String author;
     public String title;
-    public String date;
+    public long epoch;
     public String body;
     public int starCount = 0;
     public Map<String, Boolean> stars = new HashMap<>();
@@ -23,11 +23,11 @@ public class Event {
         // Default constructor required for calls to DataSnapshot.getValue(Event.class)
     }
 
-    public Event(String uid, String author, String title, String date, String body) {
+    public Event(String uid, String author, String title, Long epoch, String body) {
         this.uid = uid;
         this.author = author;
         this.title = title;
-        this.date = date;
+        this.epoch = epoch;
         this.body = body;
     }
 
@@ -38,7 +38,7 @@ public class Event {
         result.put("uid", uid);
         result.put("author", author);
         result.put("title", title);
-        result.put("date", date);
+        result.put("epoch", epoch);
         result.put("body", body);
         result.put("starCount", starCount);
         result.put("stars", stars);

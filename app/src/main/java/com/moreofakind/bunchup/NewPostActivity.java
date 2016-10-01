@@ -21,7 +21,11 @@ import com.moreofakind.bunchup.fragment.DatePickerFragment;
 import com.moreofakind.bunchup.models.Event;
 import com.moreofakind.bunchup.models.User;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,7 +89,7 @@ public class NewPostActivity extends BaseActivity {
 
         // Body is required
         if (TextUtils.isEmpty(body)) {
-            mBodyField.setError(REQUIRED);
+            mBodyField.setText("-");
             return;
         }
 
@@ -111,7 +115,17 @@ public class NewPostActivity extends BaseActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             // Write new post
-                            writeNewPost(userId, user.username, title, date, body);
+                            try {
+                                SimpleDateFormat sdf = new SimpleDateFormat("d/M/yyyy");
+                                String[] dateParts = date.split("/");
+                                int day = Integer.valueOf(dateParts[0]);
+                                int month = Integer.valueOf(dateParts[1]);
+                                int year = Integer.valueOf(dateParts[2]);
+                                Calendar epoch = new GregorianCalendar(year, month, day);
+                                writeNewPost(userId, user.username, title, epoch.getTime().getTime(), body);
+                            } catch (Exception e) {
+                                Log.d(TAG,e.getMessage());
+                            }
                         }
 
                         // Finish this Activity, back to the stream
@@ -142,11 +156,12 @@ public class NewPostActivity extends BaseActivity {
     }
 
     // [START write_fan_out]
-    private void writeNewPost(String userId, String username, String title, String date, String body) {
+    private void writeNewPost(String userId, String username, String title, long epoch, String body) {
         // Create new event at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
         String key = mDatabase.child("posts").push().getKey();
-        Event event = new Event(userId, username, title, date, body);
+        Log.d(TAG, (String.valueOf(epoch)));
+        Event event = new Event(userId, username, title, epoch, body);
         Map<String, Object> postValues = event.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
