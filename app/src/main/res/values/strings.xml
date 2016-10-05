@@ -16,8 +16,8 @@
     <string name="write_comment">Reageer</string>
     <string name="event">Verzenden</string>
     <string name="heading_recent">Evenementen</string>
-    <string name="heading_my_posts">Mijn evenementen</string>
-    <string name="heading_my_top_posts">Mijn top evenementen</string>
+    <string name="heading_my_posts">Initiateven</string>
+    <string name="heading_my_top_posts">Deelnames</string>
     <string name="pick_date">Kies datum</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

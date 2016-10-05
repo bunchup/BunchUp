@@ -19,24 +19,24 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.moreofakind.bunchup.EventDetailActivity;
 import com.moreofakind.bunchup.R;
-import com.moreofakind.bunchup.PostDetailActivity;
 import com.moreofakind.bunchup.models.Event;
-import com.moreofakind.bunchup.viewholder.PostViewHolder;
+import com.moreofakind.bunchup.viewholder.EventViewHolder;
 
-public abstract class PostListFragment extends Fragment {
+public abstract class EventListFragment extends Fragment {
 
-    private static final String TAG = "PostListFragment";
+    private static final String TAG = "EventListFragment";
 
     // [START define_database_reference]
     private DatabaseReference mDatabase;
     // [END define_database_reference]
 
-    private FirebaseRecyclerAdapter<Event, PostViewHolder> mAdapter;
+    private FirebaseRecyclerAdapter<Event, EventViewHolder> mAdapter;
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
 
-    public PostListFragment() {}
+    public EventListFragment() {}
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
@@ -66,10 +66,10 @@ public abstract class PostListFragment extends Fragment {
 
         // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = getQuery(mDatabase);
-        mAdapter = new FirebaseRecyclerAdapter<Event, PostViewHolder>(Event.class, R.layout.item_post,
-                PostViewHolder.class, postsQuery) {
+        mAdapter = new FirebaseRecyclerAdapter<Event, EventViewHolder>(Event.class, R.layout.item_post,
+                EventViewHolder.class, postsQuery) {
             @Override
-            protected void populateViewHolder(final PostViewHolder viewHolder, final Event model, final int position) {
+            protected void populateViewHolder(final EventViewHolder viewHolder, final Event model, final int position) {
                 final DatabaseReference postRef = getRef(position);
 
                 // Set click listener for the whole post view
@@ -77,9 +77,9 @@ public abstract class PostListFragment extends Fragment {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Launch PostDetailActivity
-                        Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-                        intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
+                        // Launch EventDetailActivity
+                        Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+                        intent.putExtra(EventDetailActivity.EXTRA_POST_KEY, postKey);
                         startActivity(intent);
                     }
                 });
@@ -92,7 +92,7 @@ public abstract class PostListFragment extends Fragment {
                 }
 
                 // Bind Event to ViewHolder, setting OnClickListener for the star button
-                viewHolder.bindToPost(model, new View.OnClickListener() {
+                viewHolder.bindToEvent(model, new View.OnClickListener() {
                     @Override
                     public void onClick(View starView) {
                         // Need to write to both places the post is stored
@@ -138,7 +138,7 @@ public abstract class PostListFragment extends Fragment {
             public void onComplete(DatabaseError databaseError, boolean b,
                                    DataSnapshot dataSnapshot) {
                 // Transaction completed
-                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+                Log.d(TAG, "eventTransaction:onComplete:" + databaseError);
             }
         });
     }

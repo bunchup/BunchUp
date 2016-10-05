@@ -2,24 +2,14 @@ package com.moreofakind.bunchup.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.moreofakind.bunchup.NewPostActivity;
 import com.moreofakind.bunchup.R;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener
          {
@@ -38,7 +28,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         TextView mDateField = (TextView)getActivity().findViewById(R.id.field_date);
-        mDateField.setText(day + "/" + month + "/" + year);
+        mDateField.setText(day + "/" + (month+1) + "/" + year);
     }
 
 }

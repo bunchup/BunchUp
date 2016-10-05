@@ -26,9 +26,9 @@ import com.moreofakind.bunchup.models.Comment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostDetailActivity extends BaseActivity implements View.OnClickListener {
+public class EventDetailActivity extends BaseActivity implements View.OnClickListener {
 
-    private static final String TAG = "PostDetailActivity";
+    private static final String TAG = "EventDetailActivity";
 
     public static final String EXTRA_POST_KEY = "post_key";
 
@@ -98,7 +98,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 // Getting Event failed, log a message
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
                 // [START_EXCLUDE]
-                Toast.makeText(PostDetailActivity.this, "Failed to load post.",
+                Toast.makeText(EventDetailActivity.this, "Failed to load post.",
                         Toast.LENGTH_SHORT).show();
                 // [END_EXCLUDE]
             }

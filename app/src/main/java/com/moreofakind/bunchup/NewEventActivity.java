@@ -1,13 +1,11 @@
 package com.moreofakind.bunchup;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,17 +19,15 @@ import com.moreofakind.bunchup.fragment.DatePickerFragment;
 import com.moreofakind.bunchup.models.Event;
 import com.moreofakind.bunchup.models.User;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NewPostActivity extends BaseActivity {
+public class NewEventActivity extends BaseActivity {
 
-    private static final String TAG = "NewPostActivity";
+    private static final String TAG = "NewEventActivity";
     private static final String REQUIRED = "Required";
 
     // [START declare_database_ref]
@@ -110,7 +106,7 @@ public class NewPostActivity extends BaseActivity {
                         if (user == null) {
                             // User is null, error out
                             Log.e(TAG, "User " + userId + " is unexpectedly null");
-                            Toast.makeText(NewPostActivity.this,
+                            Toast.makeText(NewEventActivity.this,
                                     "Error: could not fetch user.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
@@ -122,7 +118,7 @@ public class NewPostActivity extends BaseActivity {
                                 int month = Integer.valueOf(dateParts[1]);
                                 int year = Integer.valueOf(dateParts[2]);
                                 Calendar epoch = new GregorianCalendar(year, month, day);
-                                writeNewPost(userId, user.username, title, epoch.getTime().getTime(), body);
+                                writeNewEvent(userId, user.username, title, epoch.getTime().getTime(), body);
                             } catch (Exception e) {
                                 Log.d(TAG,e.getMessage());
                             }
@@ -156,17 +152,17 @@ public class NewPostActivity extends BaseActivity {
     }
 
     // [START write_fan_out]
-    private void writeNewPost(String userId, String username, String title, long epoch, String body) {
-        // Create new event at /user-posts/$userid/$postid and at
-        // /posts/$postid simultaneously
-        String key = mDatabase.child("posts").push().getKey();
+    private void writeNewEvent(String userId, String username, String title, long epoch, String body) {
+        // Create new event at /events/$userid/$eventid and at
+        // /events-initiatives/$eventid simultaneously
+        String key = mDatabase.child("events").push().getKey();
         Log.d(TAG, (String.valueOf(epoch)));
         Event event = new Event(userId, username, title, epoch, body);
         Map<String, Object> postValues = event.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/posts/" + key, postValues);
-        childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
+        childUpdates.put("/events/" + key, postValues);
+        childUpdates.put("/user-events/" + userId + "/" + key, postValues);
 
         mDatabase.updateChildren(childUpdates);
     }

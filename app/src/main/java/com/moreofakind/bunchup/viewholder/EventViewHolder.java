@@ -11,7 +11,7 @@ import com.moreofakind.bunchup.models.Event;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class PostViewHolder extends RecyclerView.ViewHolder {
+public class EventViewHolder extends RecyclerView.ViewHolder {
 
     public TextView titleView;
     public TextView dateView;
@@ -20,7 +20,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public TextView numStarsView;
     public TextView bodyView;
 
-    public PostViewHolder(View itemView) {
+    public EventViewHolder(View itemView) {
         super(itemView);
 
         titleView = (TextView) itemView.findViewById(R.id.post_title);
@@ -31,7 +31,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         bodyView = (TextView) itemView.findViewById(R.id.post_body);
     }
 
-    public void bindToPost(Event event, View.OnClickListener starClickListener) {
+    public void bindToEvent(Event event, View.OnClickListener starClickListener) {
         titleView.setText(event.title);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         dateView.setText(sdf.format(new Date(event.epoch)) + " - ");

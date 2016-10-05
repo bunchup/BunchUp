@@ -27,9 +27,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.moreofakind.bunchup.fragment.MyPostsFragment;
-import com.moreofakind.bunchup.fragment.MyTopPostsFragment;
-import com.moreofakind.bunchup.fragment.RecentPostsFragment;
+import com.moreofakind.bunchup.fragment.MyEventsFragment;
+import com.moreofakind.bunchup.fragment.MyParticipationsFragment;
+import com.moreofakind.bunchup.fragment.RecentEventsFragment;
 
 public class  MainActivity extends BaseActivity {
 
@@ -46,9 +46,9 @@ public class  MainActivity extends BaseActivity {
         // Create the adapter that will return a fragment for each section
         mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             private final Fragment[] mFragments = new Fragment[] {
-                    new RecentPostsFragment(),
-                    new MyPostsFragment(),
-                    new MyTopPostsFragment(),
+                    new RecentEventsFragment(),
+                    new MyEventsFragment(),
+                    new MyParticipationsFragment(),
             };
             private final String[] mFragmentNames = new String[] {
                     getString(R.string.heading_recent),
@@ -74,11 +74,11 @@ public class  MainActivity extends BaseActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        // Button launches NewPostActivity
+        // Button launches NewEventActivity
         findViewById(R.id.fab_new_post).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, NewPostActivity.class));
+                startActivity(new Intent(MainActivity.this, NewEventActivity.class));
             }
         });
     }
