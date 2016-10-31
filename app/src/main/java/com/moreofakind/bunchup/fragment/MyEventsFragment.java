@@ -10,7 +10,6 @@ public class MyEventsFragment extends EventListFragment {
     @Override
     public Query getQuery(DatabaseReference databaseReference) {
         // All my posts
-        return databaseReference.child("user-events")
-                .child(getUid());
+        return databaseReference.child("user-initiatives").child(getUid()).orderByChild("epoch").startAt(System.currentTimeMillis()).limitToFirst(100);
     }
 }

@@ -42,7 +42,7 @@ public class NewEventActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_post);
+        setContentView(R.layout.activity_new_event);
 
         // [START initialize_database_ref]
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -51,7 +51,7 @@ public class NewEventActivity extends BaseActivity {
         mTitleField = (EditText) findViewById(R.id.field_title);
         mDateField = (TextView) findViewById(R.id.field_date);
         mBodyField = (EditText) findViewById(R.id.field_body);
-        mSubmitButton = (FloatingActionButton) findViewById(R.id.fab_submit_post);
+        mSubmitButton = (FloatingActionButton) findViewById(R.id.fab_submit_event);
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,8 +117,8 @@ public class NewEventActivity extends BaseActivity {
                                 int day = Integer.valueOf(dateParts[0]);
                                 int month = Integer.valueOf(dateParts[1]);
                                 int year = Integer.valueOf(dateParts[2]);
-                                Calendar epoch = new GregorianCalendar(year, month, day);
-                                writeNewEvent(userId, user.username, title, epoch.getTime().getTime(), body);
+                                Calendar epoch = new GregorianCalendar(year, month-1, day);
+                                writeNewEvent(userId, user.username, title, epoch.getTimeInMillis(), body);
                             } catch (Exception e) {
                                 Log.d(TAG,e.getMessage());
                             }
@@ -156,14 +156,15 @@ public class NewEventActivity extends BaseActivity {
         // Create new event at /events/$userid/$eventid and at
         // /events-initiatives/$eventid simultaneously
         String key = mDatabase.child("events").push().getKey();
-        Log.d(TAG, (String.valueOf(epoch)));
         Event event = new Event(userId, username, title, epoch, body);
+        event.starCount = 1;
+        event.stars.put(getUid(),true);
         Map<String, Object> postValues = event.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/events/" + key, postValues);
-        childUpdates.put("/user-events/" + userId + "/" + key, postValues);
-
+        childUpdates.put("/user-initiatives/" + userId + "/" + key, postValues);
+        // childUpdates.put("/user-participations/" + userId + "/" + key, postValues);
         mDatabase.updateChildren(childUpdates);
     }
     // [END write_fan_out]

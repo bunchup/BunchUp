@@ -30,12 +30,12 @@ public class EventDetailActivity extends BaseActivity implements View.OnClickLis
 
     private static final String TAG = "EventDetailActivity";
 
-    public static final String EXTRA_POST_KEY = "post_key";
+    public static final String EXTRA_EVENT_KEY = "event_key";
 
-    private DatabaseReference mPostReference;
+    private DatabaseReference mEventReference;
     private DatabaseReference mCommentsReference;
-    private ValueEventListener mPostListener;
-    private String mPostKey;
+    private ValueEventListener mEventListener;
+    private String mEventKey;
     private CommentAdapter mAdapter;
 
     private TextView mAuthorView;
@@ -48,26 +48,26 @@ public class EventDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_detail);
+        setContentView(R.layout.activity_event_detail);
 
-        // Get post key from intent
-        mPostKey = getIntent().getStringExtra(EXTRA_POST_KEY);
-        if (mPostKey == null) {
-            throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
+        // Get event key from intent
+        mEventKey = getIntent().getStringExtra(EXTRA_EVENT_KEY);
+        if (mEventKey == null) {
+            throw new IllegalArgumentException("Must pass EXTRA_EVENT_KEY");
         }
 
         // Initialize Database
-        mPostReference = FirebaseDatabase.getInstance().getReference()
-                .child("posts").child(mPostKey);
+        mEventReference = FirebaseDatabase.getInstance().getReference()
+                .child("events").child(mEventKey);
         mCommentsReference = FirebaseDatabase.getInstance().getReference()
-                .child("post-comments").child(mPostKey);
+                .child("event-comments").child(mEventKey);
 
         // Initialize Views
-        mAuthorView = (TextView) findViewById(R.id.post_author);
-        mTitleView = (TextView) findViewById(R.id.post_title);
-        mBodyView = (TextView) findViewById(R.id.post_body);
+        mAuthorView = (TextView) findViewById(R.id.event_author);
+        mTitleView = (TextView) findViewById(R.id.event_title);
+        mBodyView = (TextView) findViewById(R.id.event_body);
         mCommentField = (EditText) findViewById(R.id.field_comment_text);
-        mCommentButton = (Button) findViewById(R.id.button_post_comment);
+        mCommentButton = (Button) findViewById(R.id.button_event_comment);
         mCommentsRecycler = (RecyclerView) findViewById(R.id.recycler_comments);
 
         mCommentButton.setOnClickListener(this);
@@ -79,9 +79,9 @@ public class EventDetailActivity extends BaseActivity implements View.OnClickLis
     public void onStart() {
         super.onStart();
 
-        // Add value event listener to the post
-        // [START post_value_event_listener]
-        ValueEventListener postListener = new ValueEventListener() {
+        // Add value event listener to the event
+        // [START event_value_event_listener]
+        ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Event object and use the values to update the UI
@@ -96,18 +96,18 @@ public class EventDetailActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Event failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                Log.w(TAG, "loadEvent:onCancelled", databaseError.toException());
                 // [START_EXCLUDE]
-                Toast.makeText(EventDetailActivity.this, "Failed to load post.",
+                Toast.makeText(EventDetailActivity.this, "Failed to load event.",
                         Toast.LENGTH_SHORT).show();
                 // [END_EXCLUDE]
             }
         };
-        mPostReference.addValueEventListener(postListener);
-        // [END post_value_event_listener]
+        mEventReference.addValueEventListener(eventListener);
+        // [END event_value_event_listener]
 
-        // Keep copy of post listener so we can remove it when app stops
-        mPostListener = postListener;
+        // Keep copy of event listener so we can remove it when app stops
+        mEventListener = eventListener;
 
         // Listen for comments
         mAdapter = new CommentAdapter(this, mCommentsReference);
@@ -118,9 +118,9 @@ public class EventDetailActivity extends BaseActivity implements View.OnClickLis
     public void onStop() {
         super.onStop();
 
-        // Remove post value event listener
-        if (mPostListener != null) {
-            mPostReference.removeEventListener(mPostListener);
+        // Remove event value event listener
+        if (mEventListener != null) {
+            mEventReference.removeEventListener(mEventListener);
         }
 
         // Clean up comments listener
@@ -130,12 +130,12 @@ public class EventDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.button_post_comment) {
-            postComment();
+        if (i == R.id.button_event_comment) {
+            eventComment();
         }
     }
 
-    private void postComment() {
+    private void eventComment() {
         final String uid = getUid();
         FirebaseDatabase.getInstance().getReference().child("users").child(uid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -267,7 +267,7 @@ public class EventDetailActivity extends BaseActivity implements View.OnClickLis
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "postComments:onCancelled", databaseError.toException());
+                    Log.w(TAG, "eventComments:onCancelled", databaseError.toException());
                     Toast.makeText(mContext, "Failed to load comments.",
                             Toast.LENGTH_SHORT).show();
                 }

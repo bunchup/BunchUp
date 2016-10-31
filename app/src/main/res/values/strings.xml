@@ -15,8 +15,8 @@
     <string name="sign_in">Aanmelden</string>
     <string name="write_comment">Reageer</string>
     <string name="event">Verzenden</string>
-    <string name="heading_recent">Evenementen</string>
-    <string name="heading_my_posts">Initiateven</string>
+    <string name="heading_recent">Kalender</string>
+    <string name="heading_my_posts">Initiatieven</string>
     <string name="heading_my_top_posts">Deelnames</string>
     <string name="pick_date">Kies datum</string>
     <!-- TODO: Remove or change this placeholder text -->

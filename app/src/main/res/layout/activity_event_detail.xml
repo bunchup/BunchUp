@@ -10,19 +10,19 @@
     tools:context="com.moreofakind.bunchup.EventDetailActivity">
 
     <include
-        android:id="@+id/post_author_layout"
-        layout="@layout/include_post_author"
+        android:id="@+id/event_author_layout"
+        layout="@layout/include_event_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true" />
 
     <include
-        android:id="@+id/post_text_layout"
-        layout="@layout/include_post_text"
+        android:id="@+id/event_text_layout"
+        layout="@layout/include_event_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/post_author_layout"
+        android:layout_below="@+id/event_author_layout"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp" />
 
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/post_text_layout"
+        android:layout_below="@+id/event_text_layout"
         android:layout_marginTop="20dp"
         android:weightSum="1.0">
 
@@ -44,7 +44,7 @@
             android:hint="@string/write_comment"/>
 
         <Button
-            android:id="@+id/button_post_comment"
+            android:id="@+id/button_event_comment"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_weight="0.2"

@@ -24,6 +24,10 @@ import com.moreofakind.bunchup.R;
 import com.moreofakind.bunchup.models.Event;
 import com.moreofakind.bunchup.viewholder.EventViewHolder;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 public abstract class EventListFragment extends Fragment {
 
     private static final String TAG = "EventListFragment";
@@ -42,7 +46,7 @@ public abstract class EventListFragment extends Fragment {
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_all_posts, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_all_events, container, false);
 
         // [START create_database_reference]
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -50,6 +54,7 @@ public abstract class EventListFragment extends Fragment {
 
         mRecycler = (RecyclerView) rootView.findViewById(R.id.messages_list);
         mRecycler.setHasFixedSize(true);
+        Log.d(TAG,"onCreateView");
 
         return rootView;
     }
@@ -65,26 +70,27 @@ public abstract class EventListFragment extends Fragment {
         mRecycler.setLayoutManager(mManager);
 
         // Set up FirebaseRecyclerAdapter with the Query
-        Query postsQuery = getQuery(mDatabase);
-        mAdapter = new FirebaseRecyclerAdapter<Event, EventViewHolder>(Event.class, R.layout.item_post,
-                EventViewHolder.class, postsQuery) {
+        Query eventsQuery = getQuery(mDatabase);
+        mAdapter = new FirebaseRecyclerAdapter<Event, EventViewHolder>(Event.class, R.layout.item_event,
+                EventViewHolder.class, eventsQuery) {
             @Override
             protected void populateViewHolder(final EventViewHolder viewHolder, final Event model, final int position) {
-                final DatabaseReference postRef = getRef(position);
+                final DatabaseReference eventRef = getRef(position);
 
-                // Set click listener for the whole post view
-                final String postKey = postRef.getKey();
+                // Set click listener for the whole event view
+                final String eventKey = eventRef.getKey();
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Launch EventDetailActivity
                         Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-                        intent.putExtra(EventDetailActivity.EXTRA_POST_KEY, postKey);
+                        intent.putExtra(EventDetailActivity.EXTRA_EVENT_KEY, eventKey);
                         startActivity(intent);
                     }
                 });
 
-                // Determine if the current user has liked this post and set UI accordingly
+                // Determine if the current user has liked this event and set UI accordingly
+
                 if (model.stars.containsKey(getUid())) {
                     viewHolder.starView.setImageResource(R.drawable.ic_toggle_star_24);
                 } else {
@@ -92,57 +98,39 @@ public abstract class EventListFragment extends Fragment {
                 }
 
                 // Bind Event to ViewHolder, setting OnClickListener for the star button
-                viewHolder.bindToEvent(model, new View.OnClickListener() {
+                viewHolder.bindToEvent(model, getUid(), new View.OnClickListener() {
                     @Override
                     public void onClick(View starView) {
-                        // Need to write to both places the post is stored
-                        DatabaseReference globalPostRef = mDatabase.child("posts").child(postRef.getKey());
-                        DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
-
-                        // Run two transactions
-                        onStarClicked(globalPostRef);
-                        onStarClicked(userPostRef);
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        if (model.stars.containsKey(getUid())) {
+                            model.starCount = model.starCount - 1;
+                            model.stars.remove(getUid());
+                            childUpdates.put("/user-participations/" + getUid() + "/" + eventRef.getKey(),null);
+                            childUpdates.put("/events/" + eventRef.getKey(), model.toMap());
+                            childUpdates.put("/user-initiatives/" + model.uid + "/" + eventRef.getKey(), model.toMap());
+                            Iterator starit = model.stars.keySet().iterator();
+                            while (starit.hasNext()) {
+                                String star = starit.next().toString();
+                                Log.d("xxx",star.toString());
+                                childUpdates.put("/user-participations/" + star + "/" + eventRef.getKey(), model.toMap());
+                            }
+                        } else {
+                            model.starCount = model.starCount + 1;
+                            model.stars.put(getUid(), true);
+                            childUpdates.put("/events/" + eventRef.getKey(), model.toMap());
+                            childUpdates.put("/user-initiatives/" + model.uid + "/" + eventRef.getKey(), model.toMap());
+                            Iterator starit = model.stars.keySet().iterator();
+                            while (starit.hasNext()) {
+                                childUpdates.put("/user-participations/" + starit.next().toString() + "/" + eventRef.getKey(), model.toMap());
+                            }
+                        }
+                        mDatabase.updateChildren(childUpdates);
                     }
                 });
             }
         };
         mRecycler.setAdapter(mAdapter);
     }
-
-    // [START post_stars_transaction]
-    private void onStarClicked(DatabaseReference postRef) {
-        postRef.runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                Event p = mutableData.getValue(Event.class);
-                if (p == null) {
-                    return Transaction.success(mutableData);
-                }
-
-                if (p.stars.containsKey(getUid())) {
-                    // Unstar the post and remove self from stars
-                    p.starCount = p.starCount - 1;
-                    p.stars.remove(getUid());
-                } else {
-                    // Star the post and add self to stars
-                    p.starCount = p.starCount + 1;
-                    p.stars.put(getUid(), true);
-                }
-
-                // Set value and report transaction success
-                mutableData.setValue(p);
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b,
-                                   DataSnapshot dataSnapshot) {
-                // Transaction completed
-                Log.d(TAG, "eventTransaction:onComplete:" + databaseError);
-            }
-        });
-    }
-    // [END post_stars_transaction]
 
     @Override
     public void onDestroy() {
